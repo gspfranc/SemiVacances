@@ -1,0 +1,9 @@
+<h2>Home</h2>
+ <ul>
+   <%if @current_user.is_admin%>
+   <li>[ADMIN] <a href="/users">Gestion des utilisateurs</a></li>
+
+   <%end%>
+   <li><a href="#">Nouvelle demande</a></li>
+ </ul>
+
