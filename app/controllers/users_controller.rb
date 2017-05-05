@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
   #before_filter :authenticate_user, :only => [:new, :create]
   before_action :set_user, only: [:show, :edit, :update, :destroy]
-  before_filter :admin_page_protect, only: [:edit, :update, :create, :destroy, :index]
+  before_action :admin_page_protect, only: [:edit, :update, :create, :destroy, :index]
 
   # GET /users
   # GET /users.json
@@ -10,7 +10,6 @@ class UsersController < ApplicationController
   end
 
   # GET /users/1
-  # GET /users/1.json
   def show
   end
 
@@ -25,15 +24,19 @@ class UsersController < ApplicationController
   end
 
   # PATCH/PUT /users/1
-  # PATCH/PUT /users/1.json
   def update
+
+    #password is not changed
+    if !params[:password].present?
+      params.delete(:password)
+      params.delete(:password_confirmation)
+    end
+
     respond_to do |format|
       if @user.update(user_params)
         format.html { redirect_to users_url, notice: 'User was successfully updated.' }
-        format.json { render :show, status: :ok, location: @user }
       else
         format.html { render :edit }
-        format.json { render json: @user.errors, status: :unprocessable_entity }
       end
     end
   end

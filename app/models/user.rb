@@ -1,8 +1,8 @@
 class User < ActiveRecord::Base
   attr_accessor :password
-  validates :username, :presence => true, :uniqueness => true, :length => { :in => 3..20 }
-  validates :email, :presence => true, :uniqueness => true
-  validates_length_of :password, :in => 6..20, :on => :create
+  validates :username, :presence => true, :uniqueness => true, :length => { :in => 3..20 }, :on => [:save,:update]
+  validates :email, :presence => true, :uniqueness => true, :on => [:save,:update]
+  validates_length_of :password, :in => 6..20, :on => [:save,:update]
   validates :password, :confirmation => true #password_confirmation attr
 
   before_save :encrypt_password
