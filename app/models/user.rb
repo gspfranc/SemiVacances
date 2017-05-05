@@ -20,11 +20,11 @@ class User < ActiveRecord::Base
     self.password = nil
   end
 
-  def self.authenticate(user_to_check="", login_password="")
+  def self.authenticate(user_to_check, login_password)
 
-    user_list = User.where(username: user_to_check)
+    user_list = User.where(username: user_to_check.to_s)
 
-    if user_list.count > 0  && user_list.take.match_password(login_password)
+    if user_list.count > 0  && user_list.take.match_password(login_password.to_s)
       return user_list.take
     else
       return false
@@ -32,8 +32,8 @@ class User < ActiveRecord::Base
   end
 
 
-  def match_password(login_password="")
-    self.encrypted_password == BCrypt::Engine.hash_secret(login_password, salt)
+  def match_password(login_password)
+    self.encrypted_password == BCrypt::Engine.hash_secret(login_password.to_s, salt)
   end
 
 

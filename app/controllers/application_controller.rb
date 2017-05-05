@@ -7,7 +7,7 @@ class ApplicationController < ActionController::Base
 
       return true
     else
-      redirect_to(:controller => 'sessions', :action => 'login')
+      redirect_to(login_path)
       return false
     end
   end
@@ -17,10 +17,10 @@ class ApplicationController < ActionController::Base
       # set current user object to @current_user object variable
       @current_user = User.find session[:user_id]
       if !@current_user.is_admin
-        redirect_to("/");
+        redirect_to(root_path);
       end
     else
-      redirect_to("/");
+      redirect_to(root_path);
       return false
     end
   end
@@ -28,7 +28,7 @@ class ApplicationController < ActionController::Base
 
   def save_login_state
     if session[:user_id]
-      redirect_to(:controller => 'sessions', :action => 'home')
+      redirect_to(home_path)
       return false
     else
       return true
