@@ -55,11 +55,9 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
     if @user.save
-      p "GOOD"
       flash[:notice] = "Utilisateur créé avec succès"
       redirect_to users_url
     else
-      p "BAD"
       flash[:notice] = "Form is invalid"
       render "new"
     end

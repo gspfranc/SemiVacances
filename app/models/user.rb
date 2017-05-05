@@ -1,4 +1,5 @@
 class User < ActiveRecord::Base
+  has_many :vacances
   attr_accessor :password
   validates :username, :presence => true, :uniqueness => true, :length => { :in => 3..20 }, :on => [:save,:update]
   validates :email, :presence => true, :uniqueness => true, :on => [:save,:update]

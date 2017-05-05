@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>User:</strong>
+  <%= @vacance.user_id %>
+</p>
+
+<p>
+  <strong>Date start:</strong>
+  <%= @vacance.date_start %>
+</p>
+
+<p>
+  <strong>Date end:</strong>
+  <%= @vacance.date_end %>
+</p>
+
+<p>
+  <strong>Commentaire:</strong>
+  <%= @vacance.commentaire %>
+</p>
+
+<%= link_to 'Edit', edit_user_vacance_path(@vacance) %> |
+<%= link_to 'Back', user_vacance_path %>

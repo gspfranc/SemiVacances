@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
 
 
+
   root :to => "sessions#login"
   get "signup", :to => "users#new"
   get "login", :to => "sessions#login"
@@ -11,7 +12,9 @@ Rails.application.routes.draw do
 
   match  "login_attempt", :to => "sessions#login_attempt", via: [:get, :post]
 
-  resources :users
+  resources :users do
+    resources :vacances
+  end
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 

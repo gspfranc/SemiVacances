@@ -1,0 +1,37 @@
+<h1>New Vacance</h1>
+
+<%= form_for(:vacance, :url => {:controller => 'vacances', :action => 'create'}) do |f| %>
+    <% if @vacance.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@vacance.errors.count, "error") %> prohibited this vacance from being saved:</h2>
+
+          <ul>
+            <% @vacance.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+    <% end %>
+
+    <div class="field">
+      <%= f.label :date_start %>
+      <%= f.date_select :date_start %>
+    </div>
+
+    <div class="field">
+      <%= f.label :date_end %>
+      <%= f.date_select :date_end %>
+    </div>
+
+    <div class="field">
+      <%= f.label :commentaire %>
+      <%= f.text_area :commentaire %>
+    </div>
+
+    <div class="actions">
+      <%= f.submit %>
+    </div>
+<% end %>
+
+
+<%= link_to 'Back', user_vacances_path  %>

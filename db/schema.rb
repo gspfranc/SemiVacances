@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170504150710) do
+ActiveRecord::Schema.define(version: 20170505142453) do
 
   create_table "users", force: :cascade do |t|
     t.string   "username"
@@ -20,6 +20,15 @@ ActiveRecord::Schema.define(version: 20170504150710) do
     t.boolean  "is_admin"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "vacances", force: :cascade do |t|
+    t.date     "date_start"
+    t.date     "date_end"
+    t.text     "commentaire"
+    t.integer  "user_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
   end
 
 end
