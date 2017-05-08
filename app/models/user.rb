@@ -3,11 +3,23 @@ class User < ActiveRecord::Base
   attr_accessor :password
   validates :username, :presence => true, :uniqueness => true, :length => { :in => 3..20 }, :on => [:save,:update]
   validates :email, :presence => true, :uniqueness => true, :on => [:save,:update]
-  validates_length_of :password, :in => 6..20, :on => [:save,:update]
+  validates_length_of :password, :in => 6..20, :on => [:save]
   validates :password, :confirmation => true #password_confirmation attr
 
   before_save :encrypt_password
   after_save :clear_password
+
+  def is_admin
+    self.role == 2
+  end
+
+  def is_gestionnaire
+    self.role == 1
+  end
+
+  def is_user
+    !is_admin && !is_gestionnaire
+  end
 
   def encrypt_password
     if password.present?

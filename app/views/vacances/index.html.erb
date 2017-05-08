@@ -8,8 +8,9 @@
       <th>User</th>
       <th>Date start</th>
       <th>Date end</th>
-      <th>Commentaire</th>
-      <th>J/O</th>
+      <th>Commentaires</th>
+      <th>Jours ouvrable</th>
+      <th>Decision</th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -23,7 +24,7 @@
         <td><%= v.commentaire %></td>
 
         <td><%= v.business_days_between %></td>
-
+        <td>TODO</td>
         <td><%= link_to 'Show', user_vacance_path(id:v.id)%></td>
         <td><%= link_to 'Edit', edit_user_vacance_path(id:v.id) %></td>
         <td>

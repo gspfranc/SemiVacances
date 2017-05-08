@@ -27,6 +27,8 @@ class SessionsController < ApplicationController
   end
 
   def home
+    @vacances = @current_user.vacances
+
   end
 
   def profile

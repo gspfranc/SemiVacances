@@ -1,7 +1,10 @@
 class UsersController < ApplicationController
   #before_filter :authenticate_user, :only => [:new, :create]
-  before_action :set_user, only: [:show, :edit, :update, :destroy]
-  before_action :admin_page_protect, only: [:edit, :update, :create, :destroy, :index]
+  before_action :set_user, only: [:show, :edit, :update, :destroy, :set_role]
+  before_action :admin_page_protect, only: [:edit, :update, :destroy, :index]
+  before_action :user_view_authorisation
+  before_filter :authenticate_user, except:  [:new, :create]
+
 
   # GET /users
   # GET /users.json
@@ -20,8 +23,8 @@ class UsersController < ApplicationController
 
   # GET /users/1/edit
   def edit
-
   end
+
 
   # PATCH/PUT /users/1
   def update
@@ -51,7 +54,6 @@ class UsersController < ApplicationController
     end
   end
 
-
   def create
     @user = User.new(user_params)
     if @user.save
@@ -62,6 +64,22 @@ class UsersController < ApplicationController
       render "new"
     end
 
+  end
+
+  def set_role
+
+    unless @current_user.is_admin #only admin can set_role
+      redirect_to root_path
+      return false
+    end
+
+    if @user.update(role: params['role_id'].to_i)
+      flash[:notice] = "Rôle modifié avec succès"
+      redirect_to users_path
+    else
+      flash[:notice] = "Impossible de modifier le rôle de l'utilisateur"
+      redirect_to users_path
+    end
   end
 
   private
@@ -75,5 +93,19 @@ class UsersController < ApplicationController
     params.require(:user).permit(:username, :email, :password, :encrypted_password, :salt, :is_admin)
   end
 
+
+  def user_view_authorisation
+    if action_name.in?(["edit","destroy","index","show","update"]) #action that admin and gestionnaire can acces
+      unless @current_user.is_admin || @current_user.is_gestionnaire || @current_user.id == params['id'].to_i
+        redirect_to(root_path)
+        return
+      end
+    elsif action_name.in?(["destroy"])
+      unless @current_user.is_admin || @current_user.is_gestionnaire #user cant destroy himself
+        redirect_to(root_path)
+        return
+      end
+    end
+  end
 
 end

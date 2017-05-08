@@ -1,11 +1,13 @@
 class VacancesController < ApplicationController
   before_action :set_vacance, only: [:show, :edit, :update, :destroy]
   before_filter :authenticate_user
+  before_action :vacances_view_authorisation
 
   # GET /vacances
   # GET /vacances.json
   def index
-    @vacances = Vacance.all
+    #abort
+    @vacances = Vacance.all.where("user" => params['user_id'].to_i)
   end
 
   # GET /vacances/1
@@ -16,12 +18,13 @@ class VacancesController < ApplicationController
 
   # GET /vacances/new
   def new
+    #validate to see if user is autorised to create vacance
     @vacance = Vacance.new()
-
   end
 
   # GET /vacances/1/edit
   def edit
+    redirect_to(root_path) unless @current_user.id == params[:user_id].to_i
   end
 
   # POST /vacances
@@ -69,6 +72,16 @@ class VacancesController < ApplicationController
     def set_vacance
       @vacance = Vacance.find(params[:id])
     end
+
+
+  def vacances_view_authorisation
+      if action_name.in?(["edit","destroy","new","create"]) #action that admin and gestionnaire can't access
+        redirect_to(root_path) unless @current_user.id == params['user_id'].to_i
+      else #action that admin and gestionnaire can access
+        redirect_to(root_path) unless @current_user.is_admin || @current_user.is_gestionnaire ||
+            @current_user.id == params['user_id'].to_i
+      end
+  end
 
   private
 

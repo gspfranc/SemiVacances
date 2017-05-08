@@ -17,7 +17,7 @@ ActiveRecord::Schema.define(version: 20170505142453) do
     t.string   "email"
     t.string   "encrypted_password"
     t.string   "salt"
-    t.boolean  "is_admin"
+    t.integer  "role",               default: 0
     t.datetime "created_at"
     t.datetime "updated_at"
   end

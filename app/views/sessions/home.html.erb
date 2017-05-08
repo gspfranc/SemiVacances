@@ -4,6 +4,39 @@
       <li>[ADMIN] <a href="/users">Gestion des utilisateurs</a></li>
 
   <%end%>
-  <li><a href="#">Nouvelle demande</a></li>
+  <%= link_to 'Nouvelle demande', new_user_vacance_path(@current_user) %>
 </ul>
+
+
+<h1>Vacances</h1>
+
+<table>
+  <thead>
+  <tr>
+    <th>User</th>
+    <th>Date start</th>
+    <th>Date end</th>
+    <th>Commentaire</th>
+    <th>J/O</th>
+    <th colspan="3"></th>
+  </tr>
+  </thead>
+
+  <tbody>
+  <% @vacances.each do |v| %>
+      <tr>
+        <td><%= v.user_id %></td>
+        <td><%= v.date_start %></td>
+        <td><%= v.date_end %></td>
+        <td><%= v.commentaire %></td>
+
+        <td><%= v.business_days_between %></td>
+
+
+        </td>
+      </tr>
+  <% end %>
+  </tbody>
+</table>
+
 

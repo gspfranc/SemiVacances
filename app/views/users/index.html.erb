@@ -5,7 +5,7 @@
   <tr>
     <th>Username</th>
     <th>Email</th>
-    <th>Administrateur</th>
+    <th>Rôle</th>
     <th colspan="2"></th>
   </tr>
   </thead>
@@ -16,10 +16,25 @@
         <td><%= user.username %></td>
         <td><%= user.email %></td>
 
-        <td><%= user.is_admin %></td>
+        <td><%= "Administrateur" if user.is_admin %>
+          <%= "Gestionnaire" if user.is_gestionnaire %>
+          <%= "Utilisateur" if user.is_user %>
+        </td>
         <!--td><%= link_to 'Show', user %></td-->
         <td><%= link_to 'Edit', edit_user_path(user) %></td>
         <td><%= link_to 'Destroy', user, method: :delete, data: { confirm: 'êtes-vous sur?' } %></td>
+
+        <% if user.is_admin %>
+            <td><%= link_to 'Remove Admin', user_set_role_path(user,0) %></td>
+        <% end %>
+        <% if user.is_gestionnaire %>
+            <td><%= link_to 'Remove Gestionnaire',user_set_role_path(user,0) %></td>
+
+        <% end %>
+        <% if user.is_user %>
+            <td><%= link_to 'Make Gestionnaire', user_set_role_path(user,1)  %></td>
+            <td><%= link_to 'Make Admin', user_set_role_path(user,2) %></td>
+        <% end %>
       </tr>
   <% end %>
   </tbody>
