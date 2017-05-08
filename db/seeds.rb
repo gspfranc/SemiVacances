@@ -7,4 +7,4 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 
 
-User.create(username: "francis", email: "francis@semiweb.ca", role: 2, encrypted_password: "$2a$10$tRR/q9CH9.02EqqXJOpnRe27324Jng05wQ8gWl6/Lrd3HMrYA6YsS", salt:"$2a$10$tRR/q9CH9.02EqqXJOpnRe")
+User.create(username: "francis", email: "francis@semiweb.ca", role: 2, password: "123456")

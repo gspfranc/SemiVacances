@@ -1,7 +1,5 @@
 Rails.application.routes.draw do
 
-
-
   root :to => "sessions#login"
   get "signup", :to => "users#new"
   get "login", :to => "sessions#login"
@@ -13,11 +11,10 @@ Rails.application.routes.draw do
     resources :vacances
   end
 
-
   match "users/:id/set_role/:role_id", :to => "users#set_role", via:  [:get], as: "user_set_role"
 
 
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
-
+  match "approbation/:id/approuver", :to => "vacances#approuver", via:  [:get], as: "vacance_set_approbation"
+  match "approbation/:id/refuser", :to => "vacances#refuser", via:  [:get], as: "vacance_set_refuser"
 
 end

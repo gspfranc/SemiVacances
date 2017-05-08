@@ -1,9 +1,9 @@
 class UsersController < ApplicationController
-  #before_filter :authenticate_user, :only => [:new, :create]
-  before_action :set_user, only: [:show, :edit, :update, :destroy, :set_role]
+  before_action :set_user, only: [:show, :edit, :update, :destroy, :set_role, :user_view_authorisation]
   before_action :admin_page_protect, only: [:edit, :update, :destroy, :index]
-  before_action :user_view_authorisation
   before_filter :authenticate_user, except:  [:new, :create]
+  before_action :user_view_authorisation
+
 
 
   # GET /users
@@ -30,7 +30,7 @@ class UsersController < ApplicationController
   def update
 
     #password is not changed
-    if !params[:password].present?
+    unless params[:password].present?
       params.delete(:password)
       params.delete(:password_confirmation)
     end

@@ -1,5 +1,11 @@
 class User < ActiveRecord::Base
-  has_many :vacances
+  has_many :vacances, :dependent => :delete_all
+
+
+  has_many :approbation
+  has_many :vacances_approb, through: :approbation, :foreign_key => :user_approb_id, class_name: "Vacances"
+
+
   attr_accessor :password
   validates :username, :presence => true, :uniqueness => true, :length => { :in => 3..20 }, :on => [:save,:update]
   validates :email, :presence => true, :uniqueness => true, :on => [:save,:update]
@@ -20,6 +26,18 @@ class User < ActiveRecord::Base
   def is_user
     !is_admin && !is_gestionnaire
   end
+
+  def get_role_s
+    return case self.role
+             when 0
+               "Utilisateur"
+             when 1
+               "Gestionnaire"
+             when 2
+               "Administrateur"
+    end
+  end
+
 
   def encrypt_password
     if password.present?

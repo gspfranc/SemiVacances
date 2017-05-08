@@ -9,13 +9,11 @@
 </head>
 
 <body>
-<h1>Application</h1>
-
+<h1>Application SemiVacances</h1>
 <ul>
   <li><a href="/">Home</a></li>
-
-
   <%if @current_user%>
+      <li>Bonjour <%=@current_user.username%>!</li>
       <li><a href="/logout">Logout</a></li>
   <%else%>
       <li><a href="/login">Login</a></li>
