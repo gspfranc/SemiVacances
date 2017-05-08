@@ -72,7 +72,6 @@ class VacancesController < ApplicationController
 
 
   def approuver
-
     approbation = Approbation.new()
     approbation.user = @current_user
     approbation.vacance = @current_vacances
@@ -86,6 +85,12 @@ class VacancesController < ApplicationController
 
   def refuser
 
+    approbation = Approbation.new()
+    approbation.user = @current_user
+    approbation.vacance = @current_vacances
+    approbation.decision = 2
+    approbation.save!
+    redirect_to(root_path)
 
 
   end

@@ -30,12 +30,16 @@
         <td><%= v.date_end %></td>
         <td><%= v.business_days_between %></td>
         <td><%= v.commentaire %></td>
+
         <td><%= v.get_approbation_decision_s %></td>
-               <td><%= link_to 'Edit', edit_user_vacance_path(v.user,v) %></td>
-        <td>
-          <%=link_to 'Delete', user_vacance_path(v.user,v), method: :delete, data: { confirm: 'Etes vous certain de vouloir supprimer cette demande?' }%>
-        </td>
-      </tr>
+
+        <% unless v.approbation.present? %>
+            <td><%= link_to 'Edit', edit_user_vacance_path(v.user,v) %></td>
+            <td><%=link_to 'Delete', user_vacance_path(v.user,v), method: :delete, data: { confirm: 'Etes vous
+        certain de vouloir supprimer cette demande?' }%></td>
+            </tr>
+        <% end %>
+
   <% end %>
   </tbody>
 </table>
@@ -47,39 +51,39 @@
 
 
 
-<h2>Approbation en attente</h2>
+    <h2>Approbation en attente</h2>
 
 
-<table border =1>
-  <thead>
-  <tr>
-    <th>Utilisateur</th>
-    <th>Date de la demande</th>
-    <th>Date de début</th>
-    <th>Date de fin</th>
-    <th>Jours ouvrables</th>
-    <th>Commentaires</th>
-    <th colspan="3">Action</th>
-  </tr>
-  </thead>
-
-  <tbody>
-  <% @vacances_wainting_approb.each do |v| %>
+    <table border =1>
+      <thead>
       <tr>
-        <td><%= v.user.username %></td>
-        <td> <%= v.updated_at %></td>
-        <td><%= v.date_start %></td>
-        <td><%= v.date_end %></td>
-        <td><%= v.business_days_between %></td>
-        <td><%= v.commentaire %></td>
-
-        <td><%= link_to "Approuver la demande", vacance_set_approbation_path(v)%></td>
-        <td><%= link_to "Refuser la demande", vacance_set_refuser_path(v) %></td>
-
-        </td>
+        <th>Utilisateur</th>
+        <th>Date de la demande</th>
+        <th>Date de début</th>
+        <th>Date de fin</th>
+        <th>Jours ouvrables</th>
+        <th>Commentaires</th>
+        <th colspan="3">Action</th>
       </tr>
-  <% end %>
-  </tbody>
-</table>
+      </thead>
+
+      <tbody>
+      <% @vacances_wainting_approb.each do |v| %>
+          <tr>
+            <td><%= v.user.username %></td>
+            <td> <%= v.updated_at %></td>
+            <td><%= v.date_start %></td>
+            <td><%= v.date_end %></td>
+            <td><%= v.business_days_between %></td>
+            <td><%= v.commentaire %></td>
+
+            <td><%= link_to "Approuver la demande", vacance_set_approbation_path(v)%></td>
+            <td><%= link_to "Refuser la demande", vacance_set_refuser_path(v) %></td>
+
+            </td>
+          </tr>
+      <% end %>
+      </tbody>
+    </table>
 
 <% end %>
