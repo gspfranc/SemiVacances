@@ -1,0 +1,7 @@
+class ApprobationController < ApplicationController
+
+
+
+
+
+end
