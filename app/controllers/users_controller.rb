@@ -60,6 +60,7 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
     if @user.save
       flash[:notice] = "Utilisateur créé avec succès"
+      UserMailer.new_user(@user).deliver
       redirect_to users_url
     else
       flash[:notice] = "Form is invalid"
