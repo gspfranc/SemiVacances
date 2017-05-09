@@ -15,7 +15,7 @@ ActiveRecord::Schema.define(version: 20170508153955) do
   create_table "approbations", force: :cascade do |t|
     t.integer  "vacance_id"
     t.integer  "user_id"
-    t.integer  "decision"
+    t.string   "decision"
     t.text     "commentaire"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false

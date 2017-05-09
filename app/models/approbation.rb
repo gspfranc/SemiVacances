@@ -2,19 +2,22 @@ class Approbation < ApplicationRecord
   belongs_to :user
   belongs_to :vacance
 
+  DECISION_CHOICE = %w(approved refused)
+
+
+  validates :user_id, :presence => true
+  validates :vacance_id, :presence => true
+  validates :decision, :presence => true, :inclusion=> { :in => DECISION_CHOICE }
+
+
+
+
   def get_decision_s
-    return case self.decision
-             when 1
-               "Approuvé"
-             when 2
-               "Refusé"
-             else
-               "En attente"
-           end
+    return self.decision
   end
 
   def is_approved
-    return self.decision == 1
+    return self.decision == 'approved'
   end
 
 

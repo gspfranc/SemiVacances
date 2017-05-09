@@ -2,7 +2,7 @@ class User < ActiveRecord::Base
   has_many :vacances, :dependent => :delete_all
 
 
-  has_many :approbation
+  has_many :approbation, :dependent => :nullify
   has_many :vacances_approb, through: :approbation, :foreign_key => :user_approb_id, class_name: "Vacances"
 
 
@@ -11,6 +11,7 @@ class User < ActiveRecord::Base
   validates :email, :presence => true, :uniqueness => true, :on => [:save,:update]
   validates_length_of :password, :in => 6..20, :on => [:save]
   validates :password, :confirmation => true #password_confirmation attr
+  #todo regex of email
 
   before_save :encrypt_password
   after_save :clear_password

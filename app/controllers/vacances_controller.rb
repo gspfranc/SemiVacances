@@ -2,6 +2,7 @@ class VacancesController < ApplicationController
   before_action :set_vacance, only: [:show, :edit, :update, :destroy]
   before_filter :authenticate_user
   before_action :vacances_view_authorisation
+  before_action :vacances_check_approbation_present
   before_action :approbation_authorisation, only: [:approuver, :refuser]
 
   # GET /vacances
@@ -11,16 +12,10 @@ class VacancesController < ApplicationController
     @vacances = Vacance.all.where("user" => params['user_id'].to_i)
   end
 
-  # GET /vacances/1
-  # GET /vacances/1.json
-  def show
-    redirect_to(root_path)
-  end
-
   # GET /vacances/new
   def new
     #validate to see if user is autorised to create vacance
-    @vacance = Vacance.new()
+    @vacance = Vacance.new
   end
 
   # GET /vacances/1/edit
@@ -72,11 +67,8 @@ class VacancesController < ApplicationController
 
 
   def approuver
-    approbation = Approbation.new()
-    approbation.user = @current_user
-    approbation.vacance = @current_vacances
-    approbation.decision = 1
-    approbation.save!
+    approbation = @current_vacances.build_approbation(user: @current_user, decision: 'approved')
+    approbation.save
     redirect_to(root_path)
   end
 
@@ -84,12 +76,8 @@ class VacancesController < ApplicationController
 
 
   def refuser
-
-    approbation = Approbation.new()
-    approbation.user = @current_user
-    approbation.vacance = @current_vacances
-    approbation.decision = 2
-    approbation.save!
+    approbation = @current_vacances.build_approbation(user: @current_user, decision: 'declined')
+    approbation.save
     redirect_to(root_path)
 
 
@@ -101,13 +89,16 @@ class VacancesController < ApplicationController
     @vacance = Vacance.find(params[:id])
   end
 
-
-  def vacances_view_authorisation
-
+  def vacances_check_approbation_present
     if action_name.in?(["edit","destroy","update"])
       #edit,destroy and update action is not permitted when approbation is present
       redirect_to(root_path, notice: "Ne peux editer ou supprimer une demande déja approuvé") if @vacance.approbation.present?
     end
+  end
+
+
+
+  def vacances_view_authorisation
 
     #user is not autorised to see page
     redirect_to(root_path) unless @current_user.is_admin || @current_user.is_gestionnaire ||

@@ -8,7 +8,7 @@ Rails.application.routes.draw do
   match  "login_attempt", :to => "sessions#login_attempt", via: [:get, :post]
 
   resources :users do
-    resources :vacances
+    resources :vacances, except: [:show]
   end
 
   match "users/:id/set_role/:role_id", :to => "users#set_role", via:  [:get], as: "user_set_role"
