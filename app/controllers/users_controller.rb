@@ -51,8 +51,10 @@ class UsersController < ApplicationController
     respond_to do |format|
       format.html { redirect_to users_url, notice: 'User was successfully destroyed.' }
       format.json { head :no_content }
+      format.js
+      end
     end
-  end
+
 
   def create
     @user = User.new(user_params)
@@ -100,7 +102,9 @@ class UsersController < ApplicationController
         redirect_to(root_path)
         return
       end
-    elsif action_name.in?(["destroy"])
+    end
+
+    if action_name.in?(["destroy"])
       unless @current_user.is_admin || @current_user.is_gestionnaire #user cant destroy himself
         redirect_to(root_path)
         return

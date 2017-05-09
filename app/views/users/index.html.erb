@@ -12,14 +12,14 @@
 
   <tbody>
   <% @users.each do |user| %>
-      <tr>
+      <tr id='user_<%=user.id%>'>
         <td><%= user.username %></td>
         <td><%= user.email %></td>
 
         <td><%=user.get_role_s %></td>
         <!--td><%= link_to 'Show', user %></td-->
         <td><%= link_to 'Edit', edit_user_path(user) %></td>
-        <td><%= link_to 'Destroy', user, method: :delete, data: { confirm: 'êtes-vous sur?' } %></td>
+        <td><%= link_to 'Delete', user, method: :delete, remote: true, data: { confirm: 'êtes-vous sur?' } %></td>
 
         <% if user.is_admin %>
             <td><%= link_to 'Remove Admin', user_set_role_path(user,0) %></td>
