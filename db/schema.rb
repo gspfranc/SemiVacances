@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170508153955) do
+ActiveRecord::Schema.define(version: 20170509192908) do
 
   create_table "approbations", force: :cascade do |t|
     t.integer  "vacance_id"
@@ -29,6 +29,19 @@ ActiveRecord::Schema.define(version: 20170508153955) do
     t.integer  "role",               default: 0
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "vacance_days", force: :cascade do |t|
+    t.date     "date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "vacance_days_vacances", force: :cascade do |t|
+    t.integer  "vacance_id"
+    t.integer  "vacance_day_id"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
   end
 
   create_table "vacances", force: :cascade do |t|
