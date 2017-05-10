@@ -9,8 +9,8 @@
 </form>
 
 <% if @user.present?%>
-    <h3>Rapport pour <%=@user.username%> entre le <%=@start_date%> et le <%=@end_date%></h3>
-
+    <h3>Rapport pour <%=@user.username.capitalize%> entre le <%=@start_date%> et le <%=@end_date%></h3>
+    <p><%=link_to "Download as CSV", report_user_report_path(:format => "csv", :user_id => @user.id) %></p>
     <%
       closed_day = @all_vacance_day.map{|x| x if x.approbation.present?}.compact
       approved_day = closed_day.map{|x| x if x.approbation.decision == 'approved'}.compact

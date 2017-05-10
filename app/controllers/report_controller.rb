@@ -1,6 +1,12 @@
 class ReportController < ApplicationController
 
+  before_action :authenticate_user
+  before_action :check_report_permission
+
+
+
   def user_report
+    require 'csv'
     @users = User.all
 
     if request.post?
@@ -12,8 +18,23 @@ class ReportController < ApplicationController
 
     end
 
-    render template: "reports/user_report"
+    respond_to do |format|
+      format.html { render template: "reports/user_report" }
+      format.csv {
+        @user = User.find(params['user_id'])
+        vacance_user_id = @user.vacances.map{|x| x.id if x.user_id == @user.id}
+        vacance_user = VacanceDay.where(:vacance_id => vacance_user_id)
+        send_data vacance_user.to_csv, filename: "User_report_#{@user.username}_.csv" }
+    end
+
   end
+
+
+  def check_report_permission
+    redirect_to root_path unless @current_user.is_admin #TODO change when role will be implemented
+  end
+
+
 
 
 end

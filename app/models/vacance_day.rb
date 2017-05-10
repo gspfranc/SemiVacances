@@ -22,5 +22,16 @@ class VacanceDay < ApplicationRecord
   end
 
 
+  def self.to_csv
+    attributes = %w{user date decision}
+
+    CSV.generate(headers: true) do |csv|
+      csv << attributes
+
+      all.each do |vacance_day|
+        csv << [vacance_day.vacance.user.username, vacance_day.date ,vacance_day.get_decision_s  ]
+      end
+    end
+  end
 
 end
