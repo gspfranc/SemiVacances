@@ -1,9 +1,26 @@
 class VacanceDay < ApplicationRecord
-  has_and_belongs_to_many :vacances
+  belongs_to :vacance
 
-  validates :date, :presence => true, :uniqueness => true
+  has_one :approbation, :dependent => :destroy
+  has_one :user_approbation, through: :approbation, foreign_key: "vacance_day_id", class_name: "User"
 
-  def self.date(date)
-    VacanceDay.find_or_create_by(date:date)
+
+  validates :date, :presence => true
+
+  def get_decision_s
+    return "En attente" if self.status_open?
+    self.approbation.decision
+
   end
+
+  def status_close?
+    return self.approbation.present?
+  end
+
+  def status_open?
+    return !self.status_close?
+  end
+
+
+
 end

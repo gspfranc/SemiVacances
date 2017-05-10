@@ -1,0 +1,40 @@
+<h2>Rapport par employé</h2>
+
+<form method="post">
+  Utilisateur : <%= select_tag "user_id", options_from_collection_for_select(@users, "id", "username", "1") %><br>
+  Date de début du rapport : <%= select_date Date.today, prefix: :start_date %><br>
+  Date de fin du rapport : <%= select_date Date.today+365, prefix: :end_date %><br>
+  <%=submit_tag "Générer"%>
+
+</form>
+
+<% if @user.present? %>
+    <h3>Rapport pour <%=@user.username%> entre le <%=@start_date%> et le <%=@end_date%></h3>
+
+    <table border =1>
+      <thead>
+      <tr>
+        <th># demande</th>
+        <th>Date de la demande</th>
+        <th>Date</th>
+        <th>Decision</th>
+
+      </tr>
+      </thead>
+
+      <tbody>
+      <% @user.vacances.each do |v| %>
+          <%v.vacance_days.where(:date => @start_date..@end_date).order(:date).each do |vd| %>
+          <tr>
+            <td><%= v.id %></td>
+            <td><%= v.updated_at %></td>
+            <td><%= vd.date %></td>
+            <td><%= vd.get_decision_s.upcase_first %></td>
+          </tr>
+      <% end %>
+      <% end %>
+      </tbody>
+    </table>
+
+
+  <% end %>

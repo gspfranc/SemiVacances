@@ -69,6 +69,14 @@ class UsersController < ApplicationController
 
   end
 
+
+
+  def report
+
+  end
+
+
+
   def set_role
 
     unless @current_user.is_admin #only admin can set_role

@@ -20,5 +20,12 @@
   <%= @vacance.commentaire %>
 </p>
 
-<%= link_to 'Edit', edit_user_vacance_path(@vacance) %> |
-<%= link_to 'Back', user_vacance_path %>
+<h2>Liste des jours demandé</h2>
+<ul>
+  <%@vacance.vacance_days.each do |vd| %>
+      <li><%= vd.date %> - <%= vd.get_decision_s%></li>
+  <% end %>
+</ul>
+
+
+<%= link_to 'Back', root_path %>

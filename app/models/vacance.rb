@@ -1,50 +1,37 @@
 class Vacance < ApplicationRecord
   validates_date :date_start
-  validates_date :date_end, :after => :date_start
+  validates_date :date_end, :on_or_after => :date_start
 
+  has_many :vacance_days, :dependent => :destroy
   belongs_to :user
-  has_and_belongs_to_many :vacance_days
 
-  has_one :approbation, :dependent => :delete
-  has_one :user_approbation, through: :approbation, foreign_key: "vacance_id", class_name: "User"
-
-  scope :waiting_approbation, -> { Vacance.all - Vacance.joins(:approbation) }
+  scope :waiting_approbation, -> {Vacance.all.map {|x| x if x.status_open?}.compact}
 
 
-  before_save :generate_vacances_day
-
-
-  def get_approbation_decision_s
-
-    if self.approbation.present?
-      return self.approbation.get_decision_s
-    end
-    return "En attente de decision"
-  end
-
-
-  def business_days_between
-    return self.vacance_days.size
-    #TODO returning all day....to be fix
+  def status_open?
+    return !self.closed.present?
 
   end
 
-
-
-  def generate_vacances_day
-    self.vacance_days.delete_all
-    working_date = self.date_end
-    while working_date  > self.date_start
-      current_vacance_day = VacanceDay.date(working_date)
-      self.vacance_days.push(current_vacance_day)
-      working_date = working_date - 1.day
-    end
-
+  def status_partial?
+    #TODO
+    abort
+    return false
   end
 
 
+  def status_close?
+    return true if self.closed.present?
 
+    open_vacance_day = self.vacance_days.map {|x| x if x.status_close?}.compact
+    return open_vacance_day.size > 0
+  end
 
+  def status
+
+    #return "Demande partiel" if self.status_partial?  #todo
+    self.status_open? ? "Demande ouverte" : "Demande fermé"
+  end
 
 
 

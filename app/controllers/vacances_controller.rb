@@ -1,9 +1,10 @@
 class VacancesController < ApplicationController
-  before_action :set_vacance, only: [:show, :edit, :update, :destroy]
+  before_action :set_vacance, only: [:show, :edit, :update, :destroy,:approuver,:refuser]
   before_filter :authenticate_user
   before_action :vacances_view_authorisation
-  before_action :vacances_check_approbation_present
+  before_action :vacances_check_approbation_present, only: [:edit, :destroy,:update]
   before_action :approbation_authorisation, only: [:approuver, :refuser]
+  after_action :generate_vacances_day, only: [:update,:create]
 
   # GET /vacances
   # GET /vacances.json
@@ -17,6 +18,11 @@ class VacancesController < ApplicationController
     #validate to see if user is autorised to create vacance
     @vacance = Vacance.new
   end
+
+  def show
+    @vacance = Vacance.find(params['id'])
+  end
+
 
   # GET /vacances/1/edit
   def edit
@@ -64,11 +70,15 @@ class VacancesController < ApplicationController
   end
 
 
-
-
   def approuver
-    approbation = @current_vacances.build_approbation(user: @current_user, decision: 'approved')
-    approbation.save
+    @vacance.vacance_days.each do |vd|
+      approbation = vd.build_approbation(user: @current_user, decision: 'approved')
+      approbation.save
+
+    end
+
+    @vacance.update_attribute('closed',Time.now)
+
     redirect_to(root_path)
   end
 
@@ -76,8 +86,9 @@ class VacancesController < ApplicationController
 
 
   def refuser
-    approbation = @current_vacances.build_approbation(user: @current_user, decision: 'declined')
-    approbation.save
+
+    approbation = @current_vacances.build_approbation(user: @current_user, decision: 'refused')
+    approbation.save!
     redirect_to(root_path)
 
 
@@ -90,10 +101,9 @@ class VacancesController < ApplicationController
   end
 
   def vacances_check_approbation_present
-    if action_name.in?(["edit","destroy","update"])
-      #edit,destroy and update action is not permitted when approbation is present
-      redirect_to(root_path, notice: "Ne peux editer ou supprimer une demande déja approuvé") if @vacance.approbation.present?
-    end
+
+    redirect_to(root_path, notice: "Ne peux editer ou supprimer une demande déja approuvé") unless @vacance.status_open?
+
   end
 
 
@@ -114,7 +124,7 @@ class VacancesController < ApplicationController
       eturn redirect_to root_path, notice: "Utilisateur non autorisé à effectuer l'action"
     end
 
-      #Gestionnaire ne peux autoriser ses propres vacances
+    #Gestionnaire ne peux autoriser ses propres vacances
     if @current_user.is_gestionnaire && @current_vacances.user == @current_user
       return redirect_to root_path, notice: "L'utilisateur ne peux effectuer cette action sur ses propres vacances"
     end
@@ -126,4 +136,15 @@ class VacancesController < ApplicationController
   def vacance_params
     params.require(:vacance).permit(:date_start, :date_end, :commentaire)
   end
+end
+
+
+def generate_vacances_day
+  @vacance.vacance_days.destroy_all
+  working_date = @vacance.date_end
+  while working_date  > @vacance.date_start-1
+    @vacance.vacance_days.create(date: working_date) unless working_date.saturday? || working_date.sunday?
+    working_date = working_date - 1.day
+  end
+
 end

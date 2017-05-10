@@ -13,12 +13,12 @@
 ActiveRecord::Schema.define(version: 20170509192908) do
 
   create_table "approbations", force: :cascade do |t|
-    t.integer  "vacance_id"
+    t.integer  "vacance_day_id"
     t.integer  "user_id"
     t.string   "decision"
     t.text     "commentaire"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
   end
 
   create_table "users", force: :cascade do |t|
@@ -32,16 +32,10 @@ ActiveRecord::Schema.define(version: 20170509192908) do
   end
 
   create_table "vacance_days", force: :cascade do |t|
+    t.integer  "vacance_id"
     t.date     "date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-  end
-
-  create_table "vacance_days_vacances", force: :cascade do |t|
-    t.integer  "vacance_id"
-    t.integer  "vacance_day_id"
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
   end
 
   create_table "vacances", force: :cascade do |t|
@@ -49,6 +43,7 @@ ActiveRecord::Schema.define(version: 20170509192908) do
     t.date     "date_end"
     t.text     "commentaire"
     t.integer  "user_id"
+    t.datetime "closed"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
   end

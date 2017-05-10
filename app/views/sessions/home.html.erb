@@ -28,12 +28,13 @@
         <td><%= v.updated_at %></td>
         <td><%= v.date_start %></td>
         <td><%= v.date_end %></td>
-        <td><%= v.business_days_between %></td>
+        <td><%= v.vacance_days.size%></td>
         <td><%= v.commentaire %></td>
 
-        <td><%= v.get_approbation_decision_s %></td>
+        <td><%=v.status%></td>
+        <td><%= link_to 'Détails', user_vacance_path(v.user,v) %></td>
+        <% if v.status_open? %>
 
-        <% unless v.approbation.present? %>
             <td><%= link_to 'Edit', edit_user_vacance_path(v.user,v) %></td>
             <td><%=link_to 'Delete', user_vacance_path(v.user,v), method: :delete, data: { confirm: 'Etes vous
         certain de vouloir supprimer cette demande?' }%></td>
@@ -73,7 +74,7 @@
             <td> <%= v.updated_at %></td>
             <td><%= v.date_start %></td>
             <td><%= v.date_end %></td>
-            <td><%= v.business_days_between %></td>
+            <td><%= v.vacance_days.size %></td>
             <td><%= v.commentaire %></td>
 
             <td><%= link_to "Approuver la demande", vacance_set_approbation_path(v)%></td>
@@ -84,5 +85,14 @@
       <% end %>
       </tbody>
     </table>
+
+
+
+    <h2>Rapports Disponibles</h2>
+    <ul>
+      <li><%= link_to "Rapport par employé", report_user_report_path %></li>
+      <li><%= link_to "Rapport mensuel" %></li>
+      <li><%= link_to "Rapport annuel" %></li>
+    </ul>
 
 <% end %>

@@ -5,6 +5,7 @@ class CreateVacances < ActiveRecord::Migration[5.0]
       t.date :date_end
       t.text :commentaire
       t.integer :user_id
+      t.timestamp :closed
       t.timestamps
     end
   end
