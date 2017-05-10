@@ -4,7 +4,7 @@ class User < ActiveRecord::Base
 
   has_many :approbation, :dependent => :nullify
   has_many :vacances_approb, through: :approbation, :foreign_key => :user_approb_id, class_name: "Vacances"
-
+  has_and_belongs_to_many :roles
 
   attr_accessor :password
   validates :username, :presence => true, :uniqueness => true, :length => { :in => 3..20 }, :on => [:save,:update]
