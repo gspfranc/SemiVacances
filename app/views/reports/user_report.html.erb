@@ -14,7 +14,7 @@
     <%
       closed_day = @all_vacance_day.map{|x| x if x.approbation.present?}.compact
       approved_day = closed_day.map{|x| x if x.approbation.decision == 'approved'}.compact
-      denied_day = closed_day.map{|x| x if x.approbation.decision == 'denied'}.compact
+      denied_day = closed_day.map{|x| x if x.approbation.decision == 'refused'}.compact
       open_day = @all_vacance_day.map{|x| x unless x.approbation.present?}.compact
     %>
 

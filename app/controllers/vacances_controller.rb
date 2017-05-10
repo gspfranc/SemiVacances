@@ -74,11 +74,8 @@ class VacancesController < ApplicationController
     @vacance.vacance_days.each do |vd|
       approbation = vd.build_approbation(user: @current_user, decision: 'approved')
       approbation.save
-
     end
-
     @vacance.update_attribute('closed',Time.now)
-
     redirect_to(root_path)
   end
 
@@ -86,12 +83,12 @@ class VacancesController < ApplicationController
 
 
   def refuser
-
-    approbation = @current_vacances.build_approbation(user: @current_user, decision: 'refused')
-    approbation.save!
+    @vacance.vacance_days.each do |vd|
+      approbation = vd.build_approbation(user: @current_user, decision: 'refused')
+      approbation.save
+    end
+    @vacance.update_attribute('closed',Time.now)
     redirect_to(root_path)
-
-
   end
 
   private
