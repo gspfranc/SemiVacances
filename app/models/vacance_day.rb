@@ -8,9 +8,13 @@ class VacanceDay < ApplicationRecord
   validates :date, :presence => true
 
   def get_decision_s
-    return "En attente" if self.status_open?
+    return "waiting" if self.status_open?
     self.approbation.decision
+  end
 
+  def get_decision_user_s
+    return "none" unless self.approbation.present?
+    self.approbation.user.username
   end
 
   def status_close?

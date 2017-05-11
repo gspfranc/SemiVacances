@@ -10,12 +10,12 @@
 
 <% if @user.present?%>
     <h3>Rapport pour <%=@user.username.capitalize%> entre le <%=@start_date%> et le <%=@end_date%></h3>
-    <p><%=link_to "Download as CSV", report_user_report_path(:format => "csv", :user_id => @user.id) %></p>
+    <p><%=link_to "Download as CSV", report_user_report_path(:format => "csv", :user_id => @user.id, :start_date => @start_date, :end_date => @end_date) %></p>
     <%
-      closed_day = @all_vacance_day.map{|x| x if x.approbation.present?}.compact
-      approved_day = closed_day.map{|x| x if x.approbation.decision == 'approved'}.compact
-      denied_day = closed_day.map{|x| x if x.approbation.decision == 'refused'}.compact
-      open_day = @all_vacance_day.map{|x| x unless x.approbation.present?}.compact
+      closed_day = @all_vacance_day.map{|x| x unless x['decision'] == "waiting"}.compact
+      approved_day = closed_day.map{|x| x if x['decision'] == "approved"}.compact
+      denied_day = closed_day.map{|x| x if x['decision'] == "refused"}.compact
+      open_day = @all_vacance_day.map{|x| x if x['decision'] == "waiting"}.compact
     %>
 
     <p>Jours total demandé : <%= @all_vacance_day.size%><br>
@@ -26,25 +26,19 @@
     <table border =1>
       <thead>
       <tr>
-        <th># demande</th>
-        <th>Date de la demande</th>
-        <th>Date</th>
-        <th>Decision</th>
-        <th>Decision par</th>
+
+        <% @all_vacance_day.first.keys.each do |header_key| %>
+            <th><%=header_key.capitalize%></th>
+        <% end %>
       </tr>
       </thead>
 
       <tbody>
-      <% @user.vacances.each do |v| %>
-          <%v.vacance_days.where(:date => @start_date..@end_date).order(:date).each do |vd| %>
-              <tr>
-                <td><%= v.id %></td>
-                <td><%= v.updated_at %></td>
-                <td><%= vd.date %></td>
-                <td><%= vd.get_decision_s.upcase_first %></td>
-                <td><%= vd.approbation.user.username if vd.approbation.present?%></td>
-              </tr>
-          <% end %>
+      <% @all_vacance_day.each do |vd| %>
+          <tr>
+            <% vd.values.each do |vd_value| %>
+                <td><%=vd_value%></td>
+            <% end %>
       <% end %>
       </tbody>
     </table>

@@ -123,9 +123,8 @@ class VacancesController < ApplicationController
       return redirect_to root_path, notice: "Utilisateur non autorisé à effectuer l'action"
     end
 
-    #Gestionnaire ne peux autoriser ses propres vacances
-    #Bypass is true because admin user have to return false in this situation
-    if @current_user.user_in_role?("gestionnaire", true) && @current_vacances.user == @current_user
+    #Admin sont les seuls a pouvoir s'auto approuver
+    if !@current_user.user_in_role?("admin") && @current_vacances.user == @current_user
       return redirect_to root_path, notice: "L'utilisateur ne peux effectuer cette action sur ses propres vacances"
     end
   end
