@@ -70,30 +70,7 @@ class UsersController < ApplicationController
   end
 
 
-
-  def report
-
-  end
-
-
-
-  def set_role
-
-    unless @current_user.is_admin #only admin can set_role
-      redirect_to root_path
-      return false
-    end
-
-    if @user.update(role: params['role_id'].to_i)
-      flash[:notice] = "Rôle modifié avec succès"
-      redirect_to users_path
-    else
-      flash[:notice] = "Impossible de modifier le rôle de l'utilisateur"
-      redirect_to users_path
-    end
-  end
-
-  private
+   private
   # Use callbacks to share common setup or constraints between actions.
   def set_user
     @user = User.find(params[:id])
@@ -107,14 +84,14 @@ class UsersController < ApplicationController
 
   def user_view_authorisation
     if action_name.in?(["edit","destroy","index","show","update"]) #action that admin and gestionnaire can acces
-      unless @current_user.is_admin || @current_user.is_gestionnaire || @current_user.id == params['id'].to_i
+      unless @current_user.user_in_role?("gestionnaire") || @current_user.id == params['id'].to_i
         redirect_to(root_path)
         return
       end
     end
 
     if action_name.in?(["destroy"])
-      unless @current_user.is_admin || @current_user.is_gestionnaire #user cant destroy himself
+      unless @current_user.user_in_role?("gestionnaire") #user cant destroy himself
         redirect_to(root_path)
         return
       end

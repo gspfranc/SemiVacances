@@ -1,5 +1,5 @@
 <ul>
-  <%if @current_user.is_admin%>
+  <%if @current_user.user_in_role?("admin")%>
       <li>[ADMIN] <a href="/users">Gestion des utilisateurs</a></li>
 
   <%end%>
@@ -46,7 +46,7 @@
 
 
 
-<%if @current_user.is_admin || @current_user.is_gestionnaire %>
+<%if @current_user.user_in_role?("gestionnaire")  %>
 
     <h2>Approbation en attente</h2>
 
@@ -83,13 +83,11 @@
       </tbody>
     </table>
 
+<% end %>
 
-
+<% if @current_user.user_in_role?("report_maker") %>
     <h2>Rapports Disponibles</h2>
     <ul>
       <li><%= link_to "Rapport par employé", report_user_report_path %></li>
-      <li><%= link_to "Rapport mensuel" %></li>
-      <li><%= link_to "Rapport annuel" %></li>
     </ul>
-
 <% end %>

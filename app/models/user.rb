@@ -16,27 +16,11 @@ class User < ActiveRecord::Base
   before_save :encrypt_password
   after_save :clear_password
 
-  def is_admin
-    self.role == 2
-  end
+  def get_all_role_s
 
-  def is_gestionnaire
-    self.role == 1
-  end
 
-  def is_user
-    !is_admin && !is_gestionnaire
-  end
+    return self.roles.map {|x| x.role}.join", "
 
-  def get_role_s
-    return case self.role
-             when 0
-               "Utilisateur"
-             when 1
-               "Gestionnaire"
-             when 2
-               "Administrateur"
-    end
   end
 
 
@@ -46,7 +30,6 @@ class User < ActiveRecord::Base
       self.encrypted_password= BCrypt::Engine.hash_secret(password, salt)
     end
   end
-
 
   def clear_password
     self.password = nil
@@ -66,6 +49,20 @@ class User < ActiveRecord::Base
 
   def match_password(login_password)
     self.encrypted_password == BCrypt::Engine.hash_secret(login_password.to_s, salt)
+  end
+
+
+  def self.user_in_role?(user,role ="", bypass = false) #if bypass = true, admin user will not return true
+    user_roles = user.roles.map{|x| x.role}
+    return user_roles.include?(role) if bypass
+    return user_roles.include?(role) || user_roles.include?("admin") #admin bypass all
+  end
+
+
+  def user_in_role?(role ="", bypass = false) #if bypass = true, admin user will not return true
+    user_roles = self.roles.map{|x| x.role}
+    return user_roles.include?(role) if bypass
+    return user_roles.include?(role) || user_roles.include?("admin") #admin bypass all
   end
 
 

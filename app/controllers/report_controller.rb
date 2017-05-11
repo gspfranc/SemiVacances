@@ -31,7 +31,7 @@ class ReportController < ApplicationController
 
 
   def check_report_permission
-    redirect_to root_path unless @current_user.is_admin #TODO change when role will be implemented
+    redirect_to root_path unless @current_user.user_in_role?("report_maker") #TODO change when role will be implemented
   end
 
 

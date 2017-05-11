@@ -30,7 +30,7 @@
         <th>Date de la demande</th>
         <th>Date</th>
         <th>Decision</th>
-
+        <th>Decision par</th>
       </tr>
       </thead>
 
@@ -42,6 +42,7 @@
                 <td><%= v.updated_at %></td>
                 <td><%= vd.date %></td>
                 <td><%= vd.get_decision_s.upcase_first %></td>
+                <td><%= vd.approbation.user.username if vd.approbation.present?%></td>
               </tr>
           <% end %>
       <% end %>

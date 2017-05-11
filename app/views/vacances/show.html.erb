@@ -23,7 +23,7 @@
 <h2>Liste des jours demandé</h2>
 <ul>
   <%@vacance.vacance_days.each do |vd| %>
-      <li><%= vd.date %> - <%= vd.get_decision_s%></li>
+      <li><%= vd.date %> - <%= vd.get_decision_s%> <%= " by " + vd.approbation.user.username if vd.approbation.present?%></li>
   <% end %>
 </ul>
 

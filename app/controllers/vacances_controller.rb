@@ -108,8 +108,7 @@ class VacancesController < ApplicationController
   def vacances_view_authorisation
 
     #user is not autorised to see page
-    redirect_to(root_path) unless @current_user.is_admin || @current_user.is_gestionnaire ||
-        @current_user.id == params['user_id'].to_i
+    redirect_to(root_path) unless  @current_user.user_in_role?("gestionnaire") || @current_user.id == params['user_id'].to_i
 
   end
 
@@ -117,12 +116,13 @@ class VacancesController < ApplicationController
   def approbation_authorisation
     @current_vacances = Vacance.find(params['id'])
     #seul les admins et gestionnaires peuvent approuver
-    unless @current_user.is_admin || @current_user.is_gestionnaire
-      eturn redirect_to root_path, notice: "Utilisateur non autorisé à effectuer l'action"
+    unless @current_user.user_in_role?("gestionnaire")
+      return redirect_to root_path, notice: "Utilisateur non autorisé à effectuer l'action"
     end
 
     #Gestionnaire ne peux autoriser ses propres vacances
-    if @current_user.is_gestionnaire && @current_vacances.user == @current_user
+    #Bypass is true because admin user have to return false
+    if @current_user.user_in_role?("gestionnaire", true) && @current_vacances.user == @current_user
       return redirect_to root_path, notice: "L'utilisateur ne peux effectuer cette action sur ses propres vacances"
     end
   end

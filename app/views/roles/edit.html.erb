@@ -1,0 +1,16 @@
+<h2>Edit role for <%=@user.username.capitalize%></h2>
+<form method="post">
+
+
+  <ul>
+    <% @roles.each do |role| %>
+        <li>
+          <%= check_box_tag('role_ids[]', role.id, checked = @user.user_in_role?(role.role)) %>
+          <%= h role.role -%>
+        </li>
+    <% end %>
+  </ul>
+
+  <%=submit_tag "Enregistrer"%>
+
+</form>

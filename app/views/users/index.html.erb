@@ -16,22 +16,12 @@
         <td><%= user.username %></td>
         <td><%= user.email %></td>
 
-        <td><%=user.get_role_s %></td>
+        <td><%=user.get_all_role_s %></td>
         <!--td><%= link_to 'Show', user %></td-->
         <td><%= link_to 'Edit', edit_user_path(user) %></td>
         <td><%= link_to 'Delete', user, method: :delete, remote: true, data: { confirm: 'êtes-vous sur?' } %></td>
+        <td><%= link_to 'Edit Roles', user_role_edit_path(user) %></td>
 
-        <% if user.is_admin %>
-            <td><%= link_to 'Remove Admin', user_set_role_path(user,0) %></td>
-        <% end %>
-        <% if user.is_gestionnaire %>
-            <td><%= link_to 'Remove Gestionnaire',user_set_role_path(user,0) %></td>
-
-        <% end %>
-        <% if user.is_user %>
-            <td><%= link_to 'Make Gestionnaire', user_set_role_path(user,1)  %></td>
-            <td><%= link_to 'Make Admin', user_set_role_path(user,2) %></td>
-        <% end %>
       </tr>
   <% end %>
   </tbody>

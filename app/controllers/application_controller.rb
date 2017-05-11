@@ -1,4 +1,6 @@
 class ApplicationController < ActionController::Base
+  helper_method :user_in_role?
+
   protected
   def authenticate_user
     if session[:user_id]
@@ -15,7 +17,7 @@ class ApplicationController < ActionController::Base
     if session[:user_id]
       # set current user object to @current_user object variable
       @current_user = User.find session[:user_id]
-      if !@current_user.is_admin
+      if !@current_user.user_in_role?("admin")
         redirect_to(root_path);
       end
     else
@@ -33,5 +35,7 @@ class ApplicationController < ActionController::Base
       return true
     end
   end
+
+
 
 end
