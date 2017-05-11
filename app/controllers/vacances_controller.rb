@@ -71,21 +71,24 @@ class VacancesController < ApplicationController
 
 
   def approuver
-    @vacance.vacance_days.each do |vd|
-      approbation = vd.build_approbation(user: @current_user, decision: 'approved')
-      approbation.save
+
+    Approbation.transaction do
+      @vacance.vacance_days.each do |vd|
+        approbation = vd.build_approbation(user: @current_user, decision: 'approved')
+        approbation.save
+      end
     end
     @vacance.update_attribute('closed',Time.now)
     redirect_to(root_path)
   end
 
-
-
-
   def refuser
-    @vacance.vacance_days.each do |vd|
-      approbation = vd.build_approbation(user: @current_user, decision: 'refused')
-      approbation.save
+
+    Approbation.transaction do
+      @vacance.vacance_days.each do |vd|
+        approbation = vd.build_approbation(user: @current_user, decision: 'refused')
+        approbation.save
+      end
     end
     @vacance.update_attribute('closed',Time.now)
     redirect_to(root_path)
@@ -121,7 +124,7 @@ class VacancesController < ApplicationController
     end
 
     #Gestionnaire ne peux autoriser ses propres vacances
-    #Bypass is true because admin user have to return false
+    #Bypass is true because admin user have to return false in this situation
     if @current_user.user_in_role?("gestionnaire", true) && @current_vacances.user == @current_user
       return redirect_to root_path, notice: "L'utilisateur ne peux effectuer cette action sur ses propres vacances"
     end
