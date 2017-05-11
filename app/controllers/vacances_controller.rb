@@ -142,9 +142,11 @@ end
 def generate_vacances_day
   @vacance.vacance_days.destroy_all
   working_date = @vacance.date_end
-  while working_date  > @vacance.date_start-1
-    @vacance.vacance_days.create(date: working_date) unless working_date.saturday? || working_date.sunday?
-    working_date = working_date - 1.day
+  VacanceDay.transaction do
+    while working_date  > @vacance.date_start-1
+      @vacance.vacance_days.create(date: working_date) unless working_date.saturday? || working_date.sunday?
+      working_date = working_date - 1.day
+    end
   end
 
 end
