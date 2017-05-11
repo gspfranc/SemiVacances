@@ -73,9 +73,9 @@
             <td><%= v.date_end %></td>
             <td><%= v.vacance_days.size %></td>
             <td><%= v.commentaire %></td>
-
-            <td><%= link_to "Approuver la demande", vacance_set_approbation_path(v)%></td>
-            <td><%= link_to "Refuser la demande", vacance_set_refuser_path(v) %></td>
+            <td><%= link_to "See", user_vacance_path(v.user, v)%></td>
+            <td><%= link_to "Approuver tous", vacance_set_approbation_path(v)%></td>
+            <td><%= link_to "Refuser tous", vacance_set_refuser_path(v) %></td>
 
             </td>
           </tr>

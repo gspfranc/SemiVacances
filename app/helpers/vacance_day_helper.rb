@@ -1,0 +1,2 @@
+module VacanceDayHelper
+end

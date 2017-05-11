@@ -20,12 +20,60 @@
   <%= @vacance.commentaire %>
 </p>
 
-<h2>Liste des jours demandé</h2>
-<ul>
-  <%@vacance.vacance_days.order(:date).each do |vd| %>
-      <li><%= vd.date %> - <%= vd.get_decision_s%> <%= " by " + vd.approbation.user.username if vd.approbation.present?%></li>
-  <% end %>
-</ul>
+<h2>Liste des jours demandés</h2>
+
+<form method="post">
+  <% if @current_user.user_in_role?("gestionnaire")%>
+      <%=submit_tag "Approuver les jours sélectionnés", name: 'approb_confirm' %><br><%=submit_tag "Refuser les jours sélectionnés", name: 'refused_confirm'%>
+  <%end%>
+  <table border="1">
+    <thead>
+    <tr>
+      <th><input type="checkbox" id="selectAll" value="selectAll"></th>
+      <th>Date</th>
+      <th>Status</th>
+      <th>Approbateur</th>
+      <th colspan=2>Action</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <% @vacance.vacance_days.order(:date).each do |vd| %>
+        <tr>
+          <td>
+            <% unless vd.approbation.present? || !@current_user.user_in_role?("gestionnaire")%>
+                <%=check_box_tag('vacance_days_ids[]', vd.id, checked = false )%>
+            <%end%>
+          </td>
+          <td><%=vd.date%></td>
+          <td><%=vd.get_decision_s%></td>
+          <td><%=vd.get_decision_user_s.capitalize if vd.approbation.present?%></td>
+          <% unless vd.approbation.present? || !@current_user.user_in_role?("gestionnaire")%>
+              <td><%=link_to('Approuver')%></td>
+              <td><%=link_to('Refuser')%></td>
+          <%end%>
+        </tr>
+    <% end %>
+    </tbody>
+  </table>
+  <br>
+
+</form>
+<p><%= link_to 'Back', root_path %></p>
 
 
-<%= link_to 'Back', root_path %>
+<script>
+    $('#selectAll').click(function() {
+        if (this.checked) {
+            $(':checkbox').each(function() {
+                this.checked = true;
+            });
+        } else {
+            $(':checkbox').each(function() {
+                this.checked = false;
+            });
+        }
+    });
+
+
+</script>

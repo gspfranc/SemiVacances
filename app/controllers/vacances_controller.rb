@@ -21,6 +21,13 @@ class VacancesController < ApplicationController
 
   def show
     @vacance = Vacance.find(params['id'])
+
+    if request.post?
+      #TODO
+      #VacanceDays_ids are in params['vacances_days_ids']
+      #test params['approb_confirm'] to know what submit has been clicked
+    end
+
   end
 
 
@@ -93,6 +100,10 @@ class VacancesController < ApplicationController
     @vacance.update_attribute('closed',Time.now)
     redirect_to(root_path)
   end
+
+
+
+
 
   private
   # Use callbacks to share common setup or constraints between actions.

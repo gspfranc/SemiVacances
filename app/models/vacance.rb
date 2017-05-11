@@ -14,9 +14,10 @@ class Vacance < ApplicationRecord
   end
 
   def status_partial?
-    #TODO
-    abort
-    return false
+    #TODO  fix this
+    max_approb = self.vacance_days.size
+    return [1..(max_approb-1)].include?(self.vacance_days.map{|x| x if x.approbation.present?}.compact.size)
+
   end
 
 
@@ -29,7 +30,7 @@ class Vacance < ApplicationRecord
 
   def status
 
-    #return "Demande partiel" if self.status_partial?  #todo
+    return "Demande partiel" if self.status_partial?
     self.status_open? ? "Demande ouverte" : "Demande fermé"
   end
 

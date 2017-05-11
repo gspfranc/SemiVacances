@@ -21,6 +21,5 @@ class Approbation < ApplicationRecord
   end
 
 
-
 end
 
