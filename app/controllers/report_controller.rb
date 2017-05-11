@@ -14,7 +14,7 @@ class ReportController < ApplicationController
       @start_date = Date.new(params[:start_date][:year].to_i, params[:start_date][:month].to_i,params[:start_date][:day].to_i)
       @end_date = Date.new(params[:end_date][:year].to_i, params[:end_date][:month].to_i,params[:end_date][:day].to_i)
       vacance_user_id = @user.vacances.map{|x| x.id if x.user_id == @user.id}
-      @all_vacance_day = VacanceDay.where(:vacance_id => vacance_user_id)
+      @all_vacance_day = VacanceDay.where(:vacance_id => vacance_user_id, :date => @start_date..@end_date)
 
     end
 
@@ -31,7 +31,7 @@ class ReportController < ApplicationController
 
 
   def check_report_permission
-    redirect_to root_path unless @current_user.user_in_role?("report_maker") #TODO change when role will be implemented
+    redirect_to root_path unless @current_user.user_in_role?("report_maker")
   end
 
 
