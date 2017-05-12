@@ -7,7 +7,7 @@ class User < ActiveRecord::Base
   has_and_belongs_to_many :roles
 
   attr_accessor :password
-  validates :username, :presence => true, :uniqueness => true, :length => { :in => 3..20 }, :on => [:save,:update]
+  validates :username, :presence => true, :uniqueness => true, :length => { :in => 3..20 }, :on => [:save,:update,:create]
   validates :email, :presence => true, :uniqueness => true, :on => [:save,:update]
   validates_length_of :password, :in => 6..20, :on => [:save]
   validates :password, :confirmation => true #password_confirmation attr
