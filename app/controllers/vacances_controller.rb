@@ -37,6 +37,7 @@ class VacancesController < ApplicationController
     @vacance.user_id = params[:user_id]
     respond_to do |format|
       if @vacance.save
+        create_historique(@current_user.id,"Ajout d'une nouvelle demande de vacances",@vacance.id)
         format.html { redirect_to root_path, notice: 'Vacance was successfully created.' }
         format.json { render :show, status: :created, location: @vacance }
       else
@@ -51,6 +52,7 @@ class VacancesController < ApplicationController
   def update
     respond_to do |format|
       if @vacance.update(vacance_params)
+        create_historique(@current_user.id,"Modification d'une demande de vacances existante",@vacance.id)
         format.html { redirect_to root_path, notice: 'Vacance was successfully updated.' }
         format.json { render :show, status: :ok, location: @vacance }
       else
@@ -64,39 +66,12 @@ class VacancesController < ApplicationController
   # DELETE /vacances/1.json
   def destroy
     @vacance.destroy
+    create_historique(@current_user.id,"Suppression d'une demande de vacances")
     respond_to do |format|
       format.html { redirect_to root_path, notice: 'Vacance was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
-
-
-  def approuver
-
-    Approbation.transaction do
-      @vacance.vacance_days.each do |vd|
-        approbation = vd.build_approbation(user: @current_user, decision: 'approved')
-        approbation.save
-      end
-    end
-    @vacance.update_attribute('closed',Time.now)
-    redirect_to(root_path)
-  end
-
-  def refuser
-
-    Approbation.transaction do
-      @vacance.vacance_days.each do |vd|
-        approbation = vd.build_approbation(user: @current_user, decision: 'refused')
-        approbation.save
-      end
-    end
-    @vacance.update_attribute('closed',Time.now)
-    redirect_to(root_path)
-  end
-
-
-
 
 
   private

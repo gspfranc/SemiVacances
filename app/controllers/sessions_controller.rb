@@ -29,6 +29,7 @@ class SessionsController < ApplicationController
   def home
     @my_vacances = @current_user.vacances
     @vacances_wainting_approb = Vacance.waiting_approbation
+    @historique = Historique.order(id: :desc).take(15)
 
   end
 

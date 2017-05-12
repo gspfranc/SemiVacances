@@ -88,3 +88,21 @@
       <li><%= link_to "Rapport par employé", report_user_report_path %></li>
     </ul>
 <% end %>
+
+
+
+<% if @current_user.user_in_role?("admin") %>
+    <h2>Nouvelles des utilisateurs</h2>
+
+    <table border =1>
+      <% @historique.each do |h| %>
+
+          <tr>
+            <td><%= h.created_at %></td>
+            <td><%= h.to_s %>
+              <%= link_to 'Voir la vacance', user_vacance_path(h.user_id, h.vacance_id) if h.vacance_id.present? && Vacance.exists?(h.vacance_id)%></td>
+          </tr>
+
+      <% end %>
+    </table>
+<% end %>

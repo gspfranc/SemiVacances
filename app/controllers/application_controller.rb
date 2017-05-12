@@ -36,6 +36,11 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def create_historique(user_id,message, vacance_id = nil)
+    Historique.create(user_id: user_id, message: message, vacance_id:vacance_id)
+  end
+
+
 
 
 end
