@@ -22,12 +22,6 @@ class VacancesController < ApplicationController
   def show
     @vacance = Vacance.find(params['id'])
 
-    if request.post?
-      #TODO
-      #VacanceDays_ids are in params['vacances_days_ids']
-      #test params['approb_confirm'] to know what submit has been clicked
-    end
-
   end
 
 

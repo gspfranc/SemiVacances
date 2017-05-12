@@ -21,7 +21,7 @@
 <h2>Liste des jours demandés</h2>
 
 <form method="post">
-  <% if @current_user.user_in_role?("gestionnaire")%>
+  <% if @current_user.user_in_role?("gestionnaire") && @vacance.status_open?%>
       <%=submit_tag "Approuver les jours sélectionnés", name: 'approb_checkbox' %><br><%=submit_tag "Refuser les jours sélectionnés", name: 'refuse_checkbox'%>
   <%end%>
   <table border="1">
@@ -59,6 +59,11 @@
     </tbody>
   </table>
   <br>
+
+
+  <% if @current_user.user_in_role?("admin") %>
+      <%=submit_tag 'Annuler les approbations', name: "cancel_approbation"%>
+  <% end %>
 
 </form>
 <p><%= link_to 'Back', root_path %></p>
