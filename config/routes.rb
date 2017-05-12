@@ -9,8 +9,8 @@ Rails.application.routes.draw do
   get "home", :to => "sessions#home"
   match  "login_attempt", :to => "sessions#login_attempt", via: [:get, :post]
 
-  resources :users do
-    resources :vacances do
+  resources :users, except: :show do
+    resources :vacances, except: :index do
     end
   end
 
