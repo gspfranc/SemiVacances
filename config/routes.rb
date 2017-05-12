@@ -20,7 +20,4 @@ Rails.application.routes.draw do
 
   match "users/:id/roles/", :to => "roles#edit", via: [:get, :post], as: "user_role_edit"
 
-  match "approbation/:id/approuver", :to => "vacances#approuver", via:  [:get], as: "vacance_set_approbation"
-  match "approbation/:id/refuser", :to => "vacances#refuser", via:  [:get], as: "vacance_set_refuser"
-
 end
