@@ -1,8 +1,6 @@
-<p id="notice"><%= notice %></p>
-
 <p>
   <strong>User:</strong>
-  <%= @vacance.user_id %>
+  <%= @vacance.user.username.capitalize %>
 </p>
 
 <p>
@@ -24,7 +22,7 @@
 
 <form method="post">
   <% if @current_user.user_in_role?("gestionnaire")%>
-      <%=submit_tag "Approuver les jours sélectionnés", name: 'approb_confirm' %><br><%=submit_tag "Refuser les jours sélectionnés", name: 'refused_confirm'%>
+      <%=submit_tag "Approuver les jours sélectionnés", name: 'approb_checkbox' %><br><%=submit_tag "Refuser les jours sélectionnés", name: 'refuse_checkbox'%>
   <%end%>
   <table border="1">
     <thead>
@@ -49,8 +47,9 @@
           <td><%=vd.get_decision_s%></td>
           <td><%=vd.get_decision_user_s.capitalize if vd.approbation.present?%></td>
           <% unless vd.approbation.present? || !@current_user.user_in_role?("gestionnaire")%>
-              <td><%=link_to('Approuver')%></td>
-              <td><%=link_to('Refuser')%></td>
+              <td><%=submit_tag 'Approuver', name: "approb_one[#{vd.id}]"%></td>
+              <td><%=submit_tag 'Refuser', name: "refuse_one[#{vd.id}]"%></td>
+
           <%end%>
         </tr>
     <% end %>
@@ -60,7 +59,6 @@
 
 </form>
 <p><%= link_to 'Back', root_path %></p>
-
 
 <script>
     $('#selectAll').click(function() {

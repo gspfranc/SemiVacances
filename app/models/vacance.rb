@@ -10,22 +10,18 @@ class Vacance < ApplicationRecord
 
   def status_open?
     return !self.closed.present?
-
   end
 
   def status_partial?
     #TODO  fix this
+    return false
     max_approb = self.vacance_days.size
     return [1..(max_approb-1)].include?(self.vacance_days.map{|x| x if x.approbation.present?}.compact.size)
-
   end
 
 
   def status_close?
     return true if self.closed.present?
-
-    open_vacance_day = self.vacance_days.map {|x| x if x.status_close?}.compact
-    return open_vacance_day.size > 0
   end
 
   def status

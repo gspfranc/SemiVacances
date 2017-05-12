@@ -26,17 +26,4 @@ class VacanceDay < ApplicationRecord
   end
 
 
-  def self.to_csv
-    attributes = %w{user date decision approbator}
-
-    CSV.generate(headers: true) do |csv|
-      csv << attributes
-
-      all.order(:date).each do |vacance_day|
-        approbation_user = vacance_day.approbation.present? ? vacance_day.approbation.user.username : ""
-        csv << [vacance_day.vacance.user.username, vacance_day.date ,vacance_day.get_decision_s, approbation_user]
-      end
-    end
-  end
-
 end
