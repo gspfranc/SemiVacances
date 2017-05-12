@@ -26,12 +26,12 @@
   <%end%>
   <table border="1">
     <thead>
-    <tr>a
-      <% if @vacance.status_open? %><th><input type="checkbox" id="selectAll" value="selectAll"></th><% end %>
+    <tr>
+      <% if @vacance.status_open? && @current_user.user_in_role?("gestionnaire")%><th><input type="checkbox" id="selectAll" value="selectAll"></th><% end %>
       <th>Date</th>
       <th>Status</th>
       <th>Approbateur</th>
-      <% if @vacance.status_open? %>
+      <% if @vacance.status_open? && @current_user.user_in_role?("gestionnaire") %>
           <th colspan=2>Action</th>
       <% end %>
     </tr>
@@ -40,8 +40,8 @@
     <tbody>
     <% @vacance.vacance_days.order(:date).each do |vd| %>
         <tr>
-          <% if @vacance.status_open? %><td>
-          <% unless vd.approbation.present? || !@current_user.user_in_role?("gestionnaire")%>
+          <% if @vacance.status_open? && @current_user.user_in_role?("gestionnaire")%><td>
+          <% unless vd.approbation.present?%>
               <%=check_box_tag('vacance_days_ids[]', vd.id, checked = false )%>
           <%end%>
         </td>

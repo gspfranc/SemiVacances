@@ -7,13 +7,13 @@ class RolesController < ApplicationController
 
     if request.post?
       @user.roles.delete_all
-
-      params[:role_ids].each do |role_id|
-        @user.roles.push(Role.find(role_id))
+      if params[:role_ids].present?
+        params[:role_ids].each do |role_id|
+          @user.roles.push(Role.find(role_id))
+        end
       end
-    return redirect_to users_path
+      return redirect_to users_path
     end
-
 
 
   end
